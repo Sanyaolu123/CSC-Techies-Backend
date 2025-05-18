@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { ExamType } from '@prisma/client';
+import { ExamType } from '@/enum';
 import {
   IsDateString,
   IsEnum,
