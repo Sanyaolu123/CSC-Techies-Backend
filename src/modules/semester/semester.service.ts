@@ -5,16 +5,10 @@ import {
   PaginatedResult,
 } from '@/utilities/pagination.util';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import {
-  Course,
-  Exam,
-  Semester,
-  SemesterType,
-  TimeTable,
-} from '@prisma/client';
+import { Course, Exam, Semester, TimeTable } from '@/interfaces';
+import { SemesterType } from '@/enum';
 import { PrismaService } from 'src/shared/database/prisma.service';
 import { AddSemesterDto } from './dto/add-semester.dto';
-import { session } from 'passport';
 import { UpdateSemesterDto } from './dto/update-semester.dto';
 import { SettingsService } from '../settings/settings.service';
 
@@ -36,6 +30,12 @@ export class SemesterService {
         expectedExamStartDate: new Date(data.expectedExamStartDate),
         expectedExamEndDate: new Date(data.expectedExamEndDate),
       },
+      include: {
+        courses: true,
+        timetable: true,
+        materials: true,
+        exam: true,
+      },
     });
     return semester;
   }
@@ -50,6 +50,12 @@ export class SemesterService {
         take,
         skip,
         orderBy,
+        include: {
+          courses: true,
+          timetable: true,
+          materials: true,
+          exam: true,
+        },
       }),
       this.prisma.semester.count({
         take,
@@ -65,6 +71,12 @@ export class SemesterService {
     const semester = await this.prisma.semester.findFirst({
       where: {
         id,
+      },
+      include: {
+        courses: true,
+        timetable: true,
+        materials: true,
+        exam: true,
       },
     });
 
@@ -86,6 +98,7 @@ export class SemesterService {
       include: {
         courses: true,
         timetable: true,
+        materials: true,
         exam: true,
       },
     });
@@ -133,6 +146,12 @@ export class SemesterService {
       where: {
         id,
       },
+      include: {
+        courses: true,
+        timetable: true,
+        exam: true,
+        materials: true,
+      },
     });
 
     return semester;
@@ -151,7 +170,7 @@ export class SemesterService {
 
     if (semester)
       throw new BadRequestException(
-        `Semester with this session: ${session} and semester type: ${SemesterType} already exist.`,
+        `Semester with this session: ${data.session} and semester type: ${SemesterType} already exist.`,
       );
   }
 }

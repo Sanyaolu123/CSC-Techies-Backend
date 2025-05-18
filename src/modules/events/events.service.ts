@@ -1,6 +1,6 @@
 import { PrismaService } from '@/shared';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Events } from '@prisma/client';
+import { Events } from '@/interfaces';
 import { EventsDto, updateEventDto } from './dto/events.dto';
 
 @Injectable()

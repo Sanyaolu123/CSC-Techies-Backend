@@ -23,7 +23,7 @@ model User {
   role                    RoleTypes       @default(ADMIN)
 
   @@map("users")
-}
+} 
   
 model Material {
   id                      String          @id @default(cuid())

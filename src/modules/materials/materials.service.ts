@@ -1,7 +1,7 @@
 import { PrismaService } from '@/shared';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { SettingsService } from '../settings/settings.service';
-import { AppSettings, Material } from '@prisma/client';
+import { AppSettings, Material } from '@/interfaces';
 import { AddMaterialDto } from './dto/add-material.dto';
 import { MaterialFilterDto } from './dto/material-filter.dto';
 import { UpdateMaterialDto } from './dto/update-material.dto';

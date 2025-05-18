@@ -1,4 +1,4 @@
-import { MaterialType } from '@prisma/client';
+import { MaterialType } from '@/enum';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 
 export class MaterialFilterDto {

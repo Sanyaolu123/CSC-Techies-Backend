@@ -2,7 +2,7 @@ import { PrismaService } from '@/shared';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { SettingsService } from '../settings/settings.service';
 import { AddToTimeTableDto, updateTimeTableDto } from './dto/timetable.dto';
-import { AppSettings, TimeTable } from '@prisma/client';
+import { AppSettings, TimeTable } from '@/interfaces';
 
 @Injectable()
 export class TimetableService {

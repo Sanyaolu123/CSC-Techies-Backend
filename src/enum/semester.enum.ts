@@ -1,0 +1,4 @@
+export enum SemesterType {
+  FIRST_SEMESTER = 'FIRST_SEMESTER',
+  SECOND_SEMESTER = 'SECOND_SEMESTER',
+}

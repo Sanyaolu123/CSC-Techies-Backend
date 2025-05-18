@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { SemesterType } from '@prisma/client';
+import { SemesterType } from '@/enum';
 import { IsDateString, IsEnum, IsString } from 'class-validator';
 
 export class AddSemesterDto {

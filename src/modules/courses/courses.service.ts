@@ -1,7 +1,7 @@
 import { PrismaService } from '@/shared';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { AddCourseDto } from './dto/add-course.dto';
-import { AppSettings, Course } from '@prisma/client';
+import { AppSettings, Course } from '@/interfaces';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { SettingsService } from '../settings/settings.service';
 

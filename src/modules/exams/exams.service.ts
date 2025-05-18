@@ -1,6 +1,6 @@
 import { PrismaService } from '@/shared';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { AppSettings, Exam } from '@prisma/client';
+import { AppSettings, Exam } from '@/interfaces';
 import { SettingsService } from '../settings/settings.service';
 import { AddExamDto, updateExamDto } from './dto/exam.dto';
 

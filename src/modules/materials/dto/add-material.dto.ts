@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { MaterialType } from '@prisma/client';
+import { MaterialType } from '@/enum';
 import { IsEnum, IsString, Matches } from 'class-validator';
 
 export class AddMaterialDto {

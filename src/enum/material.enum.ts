@@ -1,0 +1,8 @@
+export enum MaterialType {
+  ASSIGMENT = 'ASSIGMENT',
+  RECORDING = 'RECORDING',
+  DOCUMENT = 'DOCUMENT',
+  NOTE = 'NOTE',
+  VIDEO = 'VIDEO',
+  WEBSITE = 'WEBSITE',
+}

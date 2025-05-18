@@ -1,7 +1,7 @@
 import { PrismaService } from '@/shared';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { SettingsDto } from './dto/settings.dto';
-import { AppSettings } from '@prisma/client';
+import { AppSettings } from '@/interfaces';
 
 @Injectable()
 export class SettingsService {
