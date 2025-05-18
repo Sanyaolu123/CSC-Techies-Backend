@@ -1,0 +1,192 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id                      String          @id @default(cuid())
+  firstname               String          @db.VarChar(100)
+  lastname                String          @db.VarChar(100)
+  email                   String          @unique
+  password                String          @db.VarChar(255)
+  role                    RoleTypes       @default(ADMIN)
+
+  @@map("users")
+}
+  
+model Material {
+  id                      String          @id @default(cuid())
+  semesterId              String          @map("semester_id")
+  courseId                String          @map("course_id")
+  title                   String          @db.VarChar(255)
+  type                    MaterialType    @default(DOCUMENT)
+  url                     String          @db.VarChar(255)
+  available               Boolean?        @default(true)
+  createdAt               DateTime        @default(now()) @map("created_at")
+  course                  Course          @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  semester                Semester        @relation(fields: [semesterId], references: [id], onDelete: Cascade)
+
+  @@map("materials")
+}
+
+model Course {
+  id                      String          @id @default(cuid())
+  semesterId              String          @map("semester_id")
+  courseCode              String          @db.VarChar(100)
+  courseTitle             String          @db.VarChar(255)
+  courseType              CourseType      @default(COMPULSORY) @map("course_type")
+  units                   Int             
+  createdAt               DateTime        @default(now()) @map("created_at")
+  materials               Material[]
+  timetable               TimeTable[]
+  exam                    Exam[]
+  semester                Semester        @relation(fields: [semesterId], references: [id], onDelete: Cascade)
+
+  @@map("courses")
+}
+
+model TimeTable {
+  id                      String          @id @default(cuid())
+  courseId                String          @map("course_id")
+  semesterId              String          @map("semester_id")  
+  title                   String?         @db.VarChar(100)
+  description             String          @db.VarChar(255)
+  venue                   String          @db.VarChar(255)
+  directions              String?         @db.VarChar(255)
+  recurring               Boolean         @default(true) 
+  recurringType           RecurrenceType  
+  startDate               DateTime        @map("start_date")  
+  endDate                 DateTime        @map("end_date")
+  createdAt               DateTime        @default(now()) @map("created_at")
+  semester                Semester        @relation(fields: [semesterId], references: [id], onDelete: Cascade)
+  course                  Course          @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  sessions                TimetableSession[]
+
+  @@map("timetable")
+}
+
+model TimetableSession {
+  id         String    @id @default(cuid())
+  timetable  TimeTable @relation(fields: [timetableId], references: [id], onDelete: Cascade)
+  timetableId String   @map("timetable_id")
+  dayOfWeek  WeekDay  
+  startTime  String 
+  endTime    String
+
+  @@map("timetable_sessions")
+}
+
+model Exam {
+  id                      String          @id @default(cuid())
+  courseId                String          @map("course_id")
+  title                   String?         @db.VarChar(100)
+  description             String          @db.VarChar(255)
+  venue                   String          @db.VarChar(255)
+  directions              String?         @db.VarChar(255)
+  recurring               Boolean?        @default(false)
+  type                    ExamType?        @default(EXAM)
+  startDate               DateTime        @map("start_date")  
+  endDate                 DateTime        @map("end_date")  
+  semesterId              String          @map("semester_id")  
+  semester                Semester        @relation(fields: [semesterId], references: [id], onDelete: Cascade)
+  course                  Course          @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  createdAt               DateTime        @default(now()) @map("created_at")
+
+  @@map("exam")
+}
+
+model Events {
+  id                      String          @id @default(cuid())
+  title                   String?         @db.VarChar(100)
+  description             String          @db.VarChar(255)
+  venue                   String          @db.VarChar(255)
+  directions              String?         @db.VarChar(255)
+  recurring               Boolean?        @default(false) 
+  startDate               DateTime        @map("start_date")   
+  endDate                 DateTime        @map("end_date")  
+  createdAt               DateTime        @default(now()) @map("created_at")
+
+  @@map("events")
+}
+
+model Semester {
+  id                      String          @id @default(cuid())
+  session                 String          @db.VarChar(100)
+  startDate               DateTime        @map("start_date")  
+  endDate                 DateTime        @map("end_date")  
+  expectedExamStartDate   DateTime        @map("expected_exam_start_date")  
+  expectedExamEndDate     DateTime        @map("expected_exam_end_date")  
+  createdAt               DateTime        @default(now()) @map("created_at")
+  semesterType            SemesterType    
+  courses                 Course[] 
+  materials               Material[]
+  exam                    Exam[]
+  timetable               TimeTable[]
+
+  @@map("semester")
+}
+
+model AppSettings {
+  id                      String          @id @default(cuid())
+  currentSemesterId       String          @map("current_semester_id")
+  expectedGraduationDate  DateTime        @map("expected_graduation_date")
+
+  @@map("app_settings")
+}
+
+enum MaterialType {
+  ASSIGMENT
+  RECORDING
+  DOCUMENT
+  NOTE
+  VIDEO
+  WEBSITE
+}
+
+enum CourseType {
+  COMPULSORY
+  ELECTIVE
+}
+
+enum SemesterType {
+  FIRST_SEMESTER
+  SECOND_SEMESTER
+}
+
+enum RoleTypes {
+  ADMIN
+  MANAGER
+}
+
+enum RecurrenceType {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+enum WeekDay {
+  SUNDAY
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+}
+
+enum ExamType {
+  EXAM
+  TEST
+  PROJECT_DEFENSE
+}
